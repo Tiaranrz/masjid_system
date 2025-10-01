@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Superadmin\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('superadmin.users.profile', compact('user'));
+        return view('superadmin.users.profil', compact('user'));
     }
 
     /**

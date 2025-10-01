@@ -3,19 +3,26 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Superadmin\User;
-use App\Models\Superadmin\Masjid;
-use App\Models\Superadmin\Role;
+use App\Models\User;
+use App\Models\Masjid;
+use App\Models\Role;
 
 class DashboardController extends Controller
 {
-    public function index()
+   public function index()
     {
         return view('superadmin.dashboard', [
-            'totalMasjid'     => Masjid::count(),
-            'totalSuperadmin' => User::where('role', 'superadmin')->count(),
-            'totalAdmin'      => User::where('role', 'admin')->count(),
-            'totalJamaah'     => User::where('role', 'jamaah')->count(),
+            // Menghitung total tenant aktif (pengguna dengan peran 'admin')
+            'totalMasjidAktif' => User::where('role', 'admin')->count(),
+
+            // Menghitung total pengguna keseluruhan
+            'totalPengguna' => User::count(),
+
+            // Menghitung total admin masjid (sama dengan total tenant)
+            'totalAdmin' => User::where('role', 'admin')->count(),
+
+            // Menghitung total jamaah
+            'totalJamaah' => User::where('role', 'jamaah')->count(),
         ]);
     }
 }

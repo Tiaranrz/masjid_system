@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Superadmin\User; // Pastikan model User diimpor
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
-
 
 class AuthController extends Controller
 {
@@ -35,21 +35,28 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = Auth::user();
+        // Coba untuk otentikasi
+if (Auth::attempt($credentials)) {
+    $user = Auth::user();
 
-            // Cek apakah user memiliki role 'superadmin'
-            if ($user->role === 'superadmin') {
-                return redirect()->route('superadmin.dashboard');
-            }
-
-            // Jika role-nya bukan 'superadmin', logout dan kirim pesan error
+    switch ($user->role) {
+        case 'superadmin':
+            return redirect()->route('superadmin.dashboard')
+                ->with('success', 'Login sebagai Super Admin berhasil!');
+        case 'admin_masjid':
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Login sebagai Admin berhasil!');
+        case 'jamaah':
+            return redirect()->route('jamaah.dashboard')
+                ->with('success', 'Login sebagai Jamaah berhasil!');
+        default:
             Auth::logout();
             return back()->withErrors([
-                'email' => 'Anda tidak memiliki akses Superadmin.',
-            ])->withInput();
-        }
+                'login_error' => "Role `{$user->role}` tidak dikenali. Hubungi Super Admin."
+            ]);
+    }
+}
+
 
         // Kalau gagal login (kredensial salah)
         return back()->withErrors([
@@ -60,7 +67,7 @@ class AuthController extends Controller
     /**
      * Tampilkan halaman pendaftaran.
      */
-     public function showSignUpForm()
+    public function showSignUpForm()
     {
         return view('auth.sign-up'); // pastikan view ini ada
     }
@@ -82,7 +89,7 @@ class AuthController extends Controller
         ]);
 
         // redirect ke halaman login
-        return redirect()->route('sign-in')->with('success', 'Registrasi berhasil! Silakan login.');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
     /**
@@ -94,6 +101,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('sign-in');
+        return redirect()->route('logout');
     }
 }

@@ -7,8 +7,8 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/hope-ui.min.css?v=2.0.0') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css?v=2.0.0') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/hope-ui.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/dark.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/customizer.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/rtl.min.css') }}">
@@ -33,7 +33,7 @@
                   </div>
                 @endif
 
-                <form method="POST" action="{{ route('sign-in') }}">
+                <form method="POST" action="{{ route('login') }}">
                   @csrf
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>

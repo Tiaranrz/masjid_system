@@ -3,34 +3,44 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Superadmin\Masjid;
+use App\Models\Masjid;
+use Illuminate\Support\Str;
 
 class MasjidSeeder extends Seeder
 {
     public function run(): void
     {
-        Masjid::create([
-            'nama_masjid' => 'Masjid Agung Kota',
-            'alamat' => 'Jl. Raya Utama No. 1, Jakarta',
-            'kontak' => '081234567890',
-            'email' => 'masjidagung@mail.com',
-            'deskripsi' => 'Masjid terbesar di pusat kota, digunakan untuk kegiatan ibadah dan kajian rutin.'
-        ]);
+        // Kumpulan data masjid
+        $masjid_data = [
+            [
+                'name'          => 'Masjid Agung Kota',
+                'address'       => 'Jl. Raya Utama No. 1, Jakarta',
+                'contact_person'=> 'Ustadz Ahmad',
+                'phone'         => '081234567890',
+                'email'         => 'masjidagung@mail.com',
+                'description'   => 'Masjid terbesar di pusat kota, digunakan untuk kegiatan ibadah dan kajian rutin.',
+                'status'        => 'active',
+            ],
+            [
+                'name'          => 'Masjid Al-Furqon',
+                'address'       => 'Jl. Pendidikan No. 45, Bandung',
+                'contact_person'=> 'H. Ridwan',
+                'phone'         => '082233445566',
+                'email'         => 'alfurqon@mail.com',
+                'description'   => 'Masjid dengan kegiatan kajian rutin setiap pekan.',
+                'status'        => 'active',
+            ],
+        ];
 
-        Masjid::create([
-            'nama_masjid' => 'Masjid Al-Falah',
-            'alamat' => 'Jl. Merdeka No. 25, Bandung',
-            'kontak' => '082233445566',
-            'email' => 'alfalah@mail.com',
-            'deskripsi' => 'Masjid dengan kapasitas 2000 jamaah, aktif dalam kegiatan sosial dan pendidikan.'
-        ]);
+        foreach ($masjid_data as $data) {
+            // Tambahkan slug ke data
+            $data['slug'] = Str::slug($data['name']);
 
-        Masjid::create([
-            'nama_masjid' => 'Masjid Nurul Iman',
-            'alamat' => 'Jl. Melati No. 10, Surabaya',
-            'kontak' => '08199887766',
-            'email' => 'nuruliman@mail.com',
-            'deskripsi' => 'Masjid lingkungan dengan program kajian anak muda dan remaja.'
-        ]);
+            // Gunakan firstOrCreate: Cek apakah slug sudah ada. Jika ada, abaikan. Jika belum ada, buat.
+            Masjid::firstOrCreate(
+                ['slug' => $data['slug']], // Kriteria pencarian (harus unik)
+                $data                     // Data yang akan dibuat jika tidak ditemukan
+            );
+        }
     }
 }

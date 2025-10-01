@@ -3,116 +3,77 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Product;
+use App\Models\Event; // Pastikan Model Event sudah benar
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 
-class ProductController extends Controller
+class EventController extends Controller
 {
     /**
-     * Tampilkan daftar produk dengan search & pagination
+     * Tampilkan daftar event/kegiatan.
      */
     public function index(Request $request)
     {
-        $query = Event::query();
-
-        // Search by product_name
-        if ($request->filled('q')) {
-            $query->where('event_name', 'like', '%' . $request->q . '%');
-        }
-
-        $products = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('admin.event.index', compact('event'));
+        $events = Event::latest()->paginate(10);
+        return view('admin.event.index', compact('events'));
     }
 
-    /**
-     * Form tambah produk
-     */
     public function create()
     {
         return view('admin.event.create');
     }
 
-    /**
-     * Simpan produk baru
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-            'category'     => 'required|string|max:100',
-            'price'        => 'required|numeric|min:0',
-            'description'  => 'nullable|string',
-            'icon'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        $validateData = $request->validate([
+            'name'              =>'required|string|max:255',
+            'category'          =>'required|string|max:100',
+            'description'       =>'nullable|string',
+            'tanggal_mulai'     =>'nullable|date',
+            'tanggal_selesai'   =>'nullable|date',
+            'location'          =>'nullable|string|max:255',
+        ]); // <--- [PERBAIKAN SINTAKS: Tambah titik koma]
 
-        $data = $request->only(['product_name', 'category', 'price', 'description']);
+        Event::create($validateData);
+        Session::flash('success', 'event baru berhasil ditambahkan.');
+        return redirect()->route('admin.event.index');
 
-        // Upload icon jika ada
-        if ($request->hasFile('icon')) {
-            $data['icon'] = $request->file('icon')->store('products', 'public');
-        }
+    } // <--- [PERBAIKAN SINTAKS: Tambah kurung kurawal penutup untuk method store()]
 
-        Product::create($data);
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+    public function show(Event $event)
+    {
+        return view('admin.event.show', compact('event'));
     }
 
-    /**
-     * Form edit produk
-     */
-    public function edit($id)
+    public function edit(Event $event)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.products.edit', compact('product'));
+        return view('admin.event.edit', compact('event'));
     }
 
-    /**
-     * Update produk
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Event $event)
     {
-        $product = Product::findOrFail($id);
+        $validateData = $request->validate([
+            'name'              =>'required|string|max:255',
+            'category'          =>'required|string|max:100',
+            'description'       =>'nullable|string',
+            'tanggal_mulai'     =>'nullable|date',
+            'tanggal_selesai'   =>'nullable|date',
+            'location'          =>'nullable|string|max:255',
+        ]); // <--- [PERBAIKAN SINTAKS: Tambah titik koma]
 
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-            'category'     => 'required|string|max:100',
-            'price'        => 'required|numeric|min:0',
-            'description'  => 'nullable|string',
-            'icon'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        // [PERBAIKAN LOGIKA: Tambah proses update data]
+        $event->update($validateData);
 
-        $data = $request->only(['product_name', 'category', 'price', 'description']);
-
-        // Upload icon baru jika ada
-        if ($request->hasFile('icon')) {
-            // Hapus icon lama jika ada
-            if ($product->icon && Storage::disk('public')->exists($product->icon)) {
-                Storage::disk('public')->delete($product->icon);
-            }
-            $data['icon'] = $request->file('icon')->store('products', 'public');
-        }
-
-        $product->update($data);
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+        Session::flash('success', 'event baru telah di perbarui.');
+        return redirect()->route('admin.event.index');
     }
 
-    /**
-     * Hapus produk
-     */
-    public function destroy($id)
+    public function destroy(Event $event)
     {
-        $product = Product::findOrFail($id);
+        // [PERBAIKAN LOGIKA: Ganti $inventory dengan $event]
+        $event->delete();
 
-        // Hapus icon jika ada
-        if ($product->icon && Storage::disk('public')->exists($product->icon)) {
-            Storage::disk('public')->delete($product->icon);
-        }
-
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+        Session::flash('success', 'event berhasil di hapus');
+        return redirect()->route('admin.event.index');
     }
 }

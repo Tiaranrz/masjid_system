@@ -1,6 +1,6 @@
 @extends('superadmin.layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Superadmin')
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
@@ -9,18 +9,18 @@
             <div class="row row-cols-1">
                 <div class="overflow-hidden d-slider1 ">
                     <ul class="p-0 m-0 mb-2 swiper-wrapper list-inline">
-                        
+
     {{-- Total Masjid --}}
     <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="700">
         <div class="card-body">
             <div class="progress-widget">
                 <div id="circle-progress-01" class="text-center circle-progress circle-progress-primary"
-                     data-min-value="0" data-max-value="100" data-value="{{ $totalMasjid }}" data-type="percent">
+                     data-min-value="0" data-max-value="100" data-value="{{ $totalMasjidAktif }}" data-type="percent">
                     <i class="fas fa-mosque fa-2x text-primary"></i>
                 </div>
                 <div class="progress-detail">
-                    <p class="mb-2">Total Masjid</p>
-                    <h4 class="counter">{{ $totalMasjid }}</h4>
+                    <p class="mb-2">Total Masjid Aktif</p>
+                    <h4 class="counter">{{ $totalMasjidAktif }}</h4>
                 </div>
             </div>
         </div>
@@ -31,12 +31,12 @@
         <div class="card-body">
             <div class="progress-widget">
                 <div id="circle-progress-02" class="text-center circle-progress circle-progress-success"
-                     data-min-value="0" data-max-value="100" data-value="{{ $totalSuperadmin }}" data-type="percent">
+                     data-min-value="0" data-max-value="100" data-value="{{ $totalPengguna}}" data-type="percent">
                     <i class="fas fa-user-shield fa-2x text-success"></i>
                 </div>
                 <div class="progress-detail">
-                    <p class="mb-2">Superadmin</p>
-                    <h4 class="counter">{{ $totalSuperadmin }}</h4>
+                    <p class="mb-2">Jumlah Pengguna</p>
+                    <h4 class="counter">{{ $totalPengguna }}</h4>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                     <i class="fas fa-user-cog fa-2x text-warning"></i>
                 </div>
                 <div class="progress-detail">
-                    <p class="mb-2">Admin</p>
+                    <p class="mb-2">Admin Masjid</p>
                     <h4 class="counter">{{ $totalAdmin }}</h4>
                 </div>
             </div>

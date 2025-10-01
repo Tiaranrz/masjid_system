@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models\Superadmin;
+namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,14 +12,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-    'name',
-    'email',
-    'phone_number',
-    'password',
-    'role',
-    'gender_id',
+        'name',
+        'email',
+        'phone_number',
+        'password',
+        'id_role',    // FK ke tabel roles
+        'id_masjid',  // FK ke tabel masjid
+        'gender_id',
     ];
-
 
     protected $hidden = [
         'password',
@@ -28,18 +27,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Relasi ke Role
+     * Get the role associated with the user.
      */
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class, 'role_id', 'id_role');
+        return $this->belongsTo(Role::class, 'id_role');
     }
 
     /**
-     * Relasi ke Masjid
+     * Get the masjid associated with the user.
      */
     public function masjid(): BelongsTo
     {
-        return $this->belongsTo(Masjid::class, 'id_masjid', 'id');
+        return $this->belongsTo(Masjid::class, 'id_masjid');
     }
+
 }
