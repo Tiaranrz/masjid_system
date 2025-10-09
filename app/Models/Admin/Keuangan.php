@@ -4,39 +4,93 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;  // <-- PERBAIKAN: Impor Model User agar bisa digunakan tanpa backslash
+use Carbon\Carbon;
 
 class Keuangan extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel secara eksplisit (kebiasaan baik)
+    // Nama tabel di database
     protected $table = 'keuangan';
 
-    // Kolom yang dapat diisi secara massal (mass assignable)
+    // Kolom yang bisa diisi melalui mass assignment
     protected $fillable = [
-        'type',              // 'donasi' atau 'ziswaf'
-        'description',       // Keterangan transaksi
-        'amount',            // Jumlah uang
-        'transaction_date',  // Tanggal transaksi
-        'recorded_by_user_id', // FK ke user yang mencatat
+        'type',                // tipe transaksi (misal: pemasukan/pengeluaran)
+        'jenis',               // jenis transaksi (misal: donasi, ziswaf)
+        'nama_donatur',        // nama donatur
+        'jumlah',              // nominal transaksi
+        'tanggal',             // tanggal transaksi
+        'metode_pembayaran',   // metode pembayaran (tunai/transfer)
+        'keterangan',          // deskripsi tambahan
+        'amount',              // duplikat jumlah (jika digunakan)
     ];
 
-    // Tentukan tipe data untuk kolom tertentu (casting)
-    protected $casts = [
-        'amount' => 'decimal:2',
-        'transaction_date' => 'date',
+    // Kolom bertipe tanggal
+    protected $dates = [
+        'tanggal',
+        'created_at',
+        'updated_at',
     ];
-
-    // --- Relasi ---
 
     /**
-     * Relasi ke user yang mencatat transaksi.
+     * Akses custom: Format jumlah sebagai mata uang Rupiah.
      */
-    public function recordedBy(): BelongsTo
+    public function getFormattedJumlahAttribute()
     {
-        // Menggunakan User::class karena sudah diimpor, lebih rapi daripada \App\Models\User::class
-        return $this->belongsTo(User::class, 'recorded_by_user_id');
+        return 'Rp ' . number_format($this->jumlah, 0, ',', '.');
+    }
+
+    /**
+     * Akses custom: Format amount (jika digunakan).
+     */
+    public function getFormattedAmountAttribute()
+    {
+        if ($this->amount === null) {
+            return null;
+        }
+        return 'Rp ' . number_format($this->amount, 0, ',', '.');
+    }
+
+    /**
+     * Scope: filter berdasarkan jenis transaksi (donasi atau ziswaf).
+     */
+    public function scopeJenis($query, $jenis)
+    {
+        return $query->where('jenis', $jenis);
+    }
+
+    /**
+     * Scope: filter berdasarkan rentang tanggal.
+     */
+    public function scopeBetweenDates($query, $start, $end)
+    {
+        return $query->whereBetween('tanggal', [
+            Carbon::parse($start)->startOfDay(),
+            Carbon::parse($end)->endOfDay()
+        ]);
+    }
+
+    /**
+     * Scope: filter berdasarkan metode pembayaran.
+     */
+    public function scopeMetode($query, $metode)
+    {
+        return $query->where('metode_pembayaran', $metode);
+    }
+
+    /**
+     * Helper untuk cek apakah transaksi ini donasi.
+     */
+    public function isDonasi()
+    {
+        return strtolower($this->jenis) === 'donasi';
+    }
+
+    /**
+     * Helper untuk cek apakah transaksi ini ZISWAF.
+     */
+    public function isZiswaf()
+    {
+        return strtolower($this->jenis) === 'ziswaf';
     }
 }

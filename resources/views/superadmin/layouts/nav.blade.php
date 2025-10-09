@@ -223,7 +223,10 @@
                     <li>
                       <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="dropdown-item">logout</button>
+                        <!-- Gunakan button type="submit" yang distyling agar terlihat seperti dropdown-item -->
+                        <button type="submit" class="dropdown-item" style="width: 100%; text-align: left;">
+                          <i class="las la-sign-out-alt me-2"></i>Logout
+                        </button>
                       </form>
                   </li>
                   </ul>
@@ -258,7 +261,6 @@
               <div class="iq-header-img">
                   <img src="../assets/images/dashboard/logo-atas.jpg" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
               </div>
-          </div>   
+          </div>
           @endif       <!-- Nav Header Component End -->
         <!--Nav End-->
-      

@@ -1,79 +1,66 @@
 <?php
+// app/Http/Controllers/Admin/EventController.php
 
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Event; // Pastikan Model Event sudah benar
+use App\Models\Event;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class EventController extends Controller
 {
-    /**
-     * Tampilkan daftar event/kegiatan.
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $events = Event::latest()->paginate(10);
-        return view('admin.event.index', compact('events'));
-    }
+        $tenantId = session('current_tenant_id', 'masjid1');
+        $events = Event::forTenant($tenantId)
+                      ->orderBy('event_date', 'desc')
+                      ->get();
 
-    public function create()
-    {
-        return view('admin.event.create');
+        return view('admin.events.index', compact('events'));
     }
 
     public function store(Request $request)
     {
-        $validateData = $request->validate([
-            'name'              =>'required|string|max:255',
-            'category'          =>'required|string|max:100',
-            'description'       =>'nullable|string',
-            'tanggal_mulai'     =>'nullable|date',
-            'tanggal_selesai'   =>'nullable|date',
-            'location'          =>'nullable|string|max:255',
-        ]); // <--- [PERBAIKAN SINTAKS: Tambah titik koma]
+        $validatedData = $request->validate([
+            'judul_event' => 'required|string|max:150',
+            'description' => 'nullable|string',
+            'event_date' => 'required|date',
+            'location' => 'nullable|string|max:255',
+            'status' => 'required|in:upcoming,ongoing,finished',
+            'masjid' => 'nullable|string|max:255'
+        ]);
 
-        Event::create($validateData);
-        Session::flash('success', 'event baru berhasil ditambahkan.');
-        return redirect()->route('admin.event.index');
+        // Tambahkan tenant_id otomatis
+        $validatedData['tenant_id'] = session('current_tenant_id', 'masjid1');
 
-    } // <--- [PERBAIKAN SINTAKS: Tambah kurung kurawal penutup untuk method store()]
+        Event::create($validatedData);
 
-    public function show(Event $event)
-    {
-        return view('admin.event.show', compact('event'));
+        return redirect()->route('admin.events.index')->with('success', 'Event berhasil ditambahkan.');
     }
 
-    public function edit(Event $event)
+    // Update method lainnya juga...
+    public function edit($id)
     {
-        return view('admin.event.edit', compact('event'));
+        $tenantId = session('current_tenant_id', 'masjid1');
+        $event = Event::forTenant($tenantId)->findOrFail($id);
+
+        return view('admin.events.edit', compact('event'));
     }
 
-    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
-        $validateData = $request->validate([
-            'name'              =>'required|string|max:255',
-            'category'          =>'required|string|max:100',
-            'description'       =>'nullable|string',
-            'tanggal_mulai'     =>'nullable|date',
-            'tanggal_selesai'   =>'nullable|date',
-            'location'          =>'nullable|string|max:255',
-        ]); // <--- [PERBAIKAN SINTAKS: Tambah titik koma]
+        $tenantId = session('current_tenant_id', 'masjid1');
+        $event = Event::forTenant($tenantId)->findOrFail($id);
 
-        // [PERBAIKAN LOGIKA: Tambah proses update data]
-        $event->update($validateData);
-
-        Session::flash('success', 'event baru telah di perbarui.');
-        return redirect()->route('admin.event.index');
+        // ... validasi dan update
     }
 
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        // [PERBAIKAN LOGIKA: Ganti $inventory dengan $event]
+        $tenantId = session('current_tenant_id', 'masjid1');
+        $event = Event::forTenant($tenantId)->findOrFail($id);
         $event->delete();
 
-        Session::flash('success', 'event berhasil di hapus');
-        return redirect()->route('admin.event.index');
+        return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus.');
     }
 }

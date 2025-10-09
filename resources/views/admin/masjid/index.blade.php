@@ -1,134 +1,95 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Profil Pengguna')
+@section('title', 'Profil Masjid')
 
 @section('content')
 
-{{-- Container Utama Profil --}}
-<div class="conatiner-fluid content-inner mt-n5 py-8">
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card" data-aos="fade-up" data-aos-delay="600">
-            <div class="card-body">
-                <div class="d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="d-flex flex-wrap align-items-center">
-                        <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
-                            {{-- Foto Profil --}}
-                            <img src="{{ asset('assets/images/avatars/avtar_1.png') }}" alt="User-Profile" class="theme-color-default-img img-fluid rounded-pill avatar-100">
+<div class="container-fluid content-inner mt-n5 py-8">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" data-aos="fade-up" data-aos-delay="600">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                        <div class="d-flex flex-wrap align-items-center">
+                            {{-- Logo / Foto Masjid --}}
+                            <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
+                                <img src="{{ asset('assets/images/avatars/01.png') }}" alt="Masjid" class="theme-color-default-img img-fluid rounded avatar-100">
+                            </div>
+                            <div>
+                                <h4 class="me-2 h4">{{ $masjid->name_masjid }}</h4>
+                                <span class="badge bg-success text-capitalize">
+                                    {{ $masjid->status ?? 'pending' }}
+                                </span>
+                            </div>
                         </div>
-                        <div class="d-flex flex-wrap align-items-center mb-3 mb-sm-0">
-                            {{-- Nama dan Role Pengguna --}}
-                            <h4 class="me-2 h4">{{ Auth::user()->name }}</h4>
-                            <span class="badge bg-primary text-capitalize">{{ Auth::user()->role ?? 'Jamaah' }}</span>
+
+                        {{-- Tabs --}}
+                        <ul class="d-flex nav nav-pills mb-0 text-center profile-tab" id="profile-pills-tab" role="tablist">
+                           <li class="nav-item">
+                              <a class="nav-link active" data-bs-toggle="tab" href="#profil-masjid" role="tab">Detail Masjid</a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" data-bs-toggle="tab" href="#pengurus-masjid" role="tab">Struktur Pengurus</a>
+                           </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Konten Tab --}}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="profile-content tab-content">
+
+                {{-- TAB 1: DETAIL MASJID --}}
+                <div id="profil-masjid" class="tab-pane fade active show">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Informasi Masjid</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <h6 class="text-primary">Kontak & Alamat</h6>
+                                    <p><strong>Alamat:</strong> {{ $masjid->address }}</p>
+                                    <p><strong>No. Telepon:</strong> {{ $masjid->phone ?? '-' }}</p>
+                                    <p><strong>Email:</strong> {{ $masjid->email ?? '-' }}</p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="text-primary">Informasi Lain</h6>
+                                    <p><strong>Tahun SK:</strong> {{ $masjid->tahun_sk ?? '-' }}</p>
+                                    <p><strong>Luas Bangunan:</strong> {{ $masjid->luas_bangunan ?? '-' }} m²</p>
+                                    <p><strong>Luas Tanah:</strong> {{ $masjid->luas_tanah ?? '-' }} m²</p>
+                                </div>
+                            </div>
+
+                            {{-- Tombol Edit --}}
+                            <div class="mt-4">
+                                <a href="{{ route('admin.masjid.edit', $masjid->id) }}" class="btn btn-warning">Edit</a>
+                            </div>
                         </div>
                     </div>
-
-                    {{-- Tabs Navigasi (Diambil dari User Profile HTML) --}}
-                    <ul class="d-flex nav nav-pills mb-0 text-center profile-tab" data-toggle="slider-tab" id="profile-pills-tab" role="tablist">
-                       <li class="nav-item">
-                          <a class="nav-link active" data-bs-toggle="tab" href="#profile-detail" role="tab" aria-selected="true">Detail Profil</a>
-                       </li>
-                       <li class="nav-item">
-                          <a class="nav-link" data-bs-toggle="tab" href="#profile-security" role="tab" aria-selected="false">Pengaturan Keamanan</a>
-                       </li>
-                    </ul>
                 </div>
+
+                {{-- TAB 2: STRUKTUR PENGURUS --}}
+                <div id="pengurus-masjid" class="tab-pane fade">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Struktur Pengurus Masjid</h4>
+                        </div>
+                        <div class="card-body">
+                            {!! $masjid->management_structure ?? '<p>Belum ada data struktur pengurus</p>' !!}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="profile-content tab-content">
-
-            {{-- TAB 1: DETAIL PROFIL (Menggunakan Struktur Card) --}}
-            <div id="profile-detail" class="tab-pane fade active show">
-                <div class="card">
-                    <div class="card-header">
-                       <div class="header-title">
-                          <h4 class="card-title">Nama Masjid</h4>
-                       </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-
-                            {{-- Blok Kiri: Data Kontak --}}
-                            <div class="col-md-6">
-                                <h6 class="mb-3 text-primary">Informasi Kontak</h6>
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Email:</h6>
-                                    <p>{{ Auth::user()->email }}</p>
-                                </div>
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Nomor HP:</h6>
-                                    <p>{{ Auth::user()->phone_number ?? 'Belum ada' }}</p>
-                                </div>
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Jenis Kelamin:</h6>
-                                    <p>{{ Auth::user()->gender_id ? (Auth::user()->gender_id == 1 ? 'Laki-laki' : 'Perempuan') : 'Belum ada' }}</p>
-                                </div>
-                            </div>
-
-                            {{-- Blok Kanan: Informasi Tambahan --}}
-                            <div class="col-md-6">
-                                <h6 class="mb-3 text-primary">Informasi Admin Masjid</h6>
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Role Utama:</h6>
-                                    <p>{{ Auth::user()->role ?? 'N/A' }}</p>
-                                </div>
-                                @if (Auth::user()->id_masjid)
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Masjid Dikelola:</h6>
-                                    <p>{{ Auth::user()->masjid->name ?? 'Tidak Ditemukan' }}</p>
-                                </div>
-                                @endif
-                                <div class="mt-2">
-                                    <h6 class="mb-1">Tahun Berdiri(SK):</h6>
-                                    <p>{{ Auth::user()->created_at->format('d F Y') }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Tombol Edit --}}
-                        <div class="mt-4">
-                            <a href="#" class="btn btn-warning">Edit Detail Profil</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- TAB 2: PENGATURAN KEAMANAN (Password Reset) --}}
-            <div id="profile-security" class="tab-pane fade">
-                <div class="card">
-                     <div class="card-header">
-                        <div class="header-title">
-                           <h4 class="card-title">Ubah Kata Sandi</h4>
-                        </div>
-                     </div>
-                     <div class="card-body">
-                        <form method="POST" action="#">
-                            @csrf
-                            @method('PUT')
-                           <div class="form-group">
-                              <label for="currentPassword" class="form-label">Kata Sandi Saat Ini</label>
-                              <input type="password" class="form-control" id="currentPassword" name="current_password" required>
-                           </div>
-                           <div class="form-group">
-                              <label for="newPassword" class="form-label">Kata Sandi Baru</label>
-                              <input type="password" class="form-control" id="newPassword" name="new_password" required>
-                           </div>
-                           <div class="form-group">
-                              <label for="confirmPassword" class="form-label">Konfirmasi Kata Sandi Baru</label>
-                              <input type="password" class="form-control" id="confirmPassword" name="new_password_confirmation" required>
-                           </div>
-                           <button type="submit" class="btn btn-danger">Simpan Perubahan Kata Sandi</button>
-                        </form>
-                     </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 @endsection

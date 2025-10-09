@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AuthMiddleware
+class AuthMiddleware 
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class AuthMiddleware
         // Cek apakah user sudah login
         if (!Auth::check()) {
             // Kalau belum login, redirect ke halaman login
-            return redirect()->route('sign-in')->withErrors([
+            return redirect()->route('login')->withErrors([
                 'email' => 'Silakan login terlebih dahulu.',
             ]);
         }

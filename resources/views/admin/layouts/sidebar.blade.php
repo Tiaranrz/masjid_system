@@ -1,6 +1,7 @@
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
         <a href="{{ route('admin.dashboard') }}" class="navbar-brand">
+            <!--- Logo Start --->
             <div class="logo-main">
                 <div class="logo-normal">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="height: 50px;">
@@ -9,7 +10,9 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Mini" style="height: 32px;">
                 </div>
             </div>
-            <h4 class="logo-title">Admin<br> Masjid</h4>
+            <!--- Logo End --->
+
+            <h5 class="logo-title">Admin<br> Masjid</h4>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
@@ -49,7 +52,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menu-masjid" role="button" aria-expanded="false" aria-controls="menu-masjid">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#masjid" role="button" aria-expanded="false" aria-controls="masjid">
                         <div>
                             <i class="fas fa-mosque"></i>
                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +69,7 @@
                                 12.2462 10.7254 12.4594 10.7944 12.6627C10.9569 13.0627 11.3614 13.3165 11.7997 13.2936Z" fill="currentColor">
                                 </path>
                             </svg>
-                            <span class="item-name">Manajemen Informasi</span>
+                            <span class="item-name">Manajemen Masjid</span>
                         </div>
                         <i class="right-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -74,9 +77,9 @@
                             </svg>
                         </i>
                     </a>
-                     <ul class="collapse show list-unstyled ps-4" id="menu-masjid">
+                     <ul class="collapse show list-unstyled ps-4" id="masjid">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.masjid.index') }}">
+                            <a href="{{ route('admin.masjid.index') }}">
                                 <i class="icon">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33049 2.00049H16.6695C20.0705 2.00049 21.9905 3.92949
@@ -95,37 +98,10 @@
                                 <span class="item-name">Profil Masjid</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.masjid.index') }}">
-                                <i class="icon">
-                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22
-                                        7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2
-                                        4.37927 4.28 1.99927 7.67 1.99927ZM11.99 9.06027C11.52 9.06027 11.13 8.66927 11.13 8.19027C11.13 7.70027
-                                        11.52 7.31027 12.01 7.31027C12.49 7.31027 12.88 7.70027 12.88 8.19027C12.88 8.66927 12.49 9.06027 11.99
-                                        9.06027ZM12.87 15.7803C12.87 16.2603 12.48 16.6503 11.99 16.6503C11.51 16.6503 11.12 16.2603 11.12
-                                        15.7803V11.3603C11.12 10.8793 11.51 10.4803 11.99 10.4803C12.48 10.4803 12.87 10.8793 12.87 11.3603V15.7803Z" fill="currentColor">
-                                        </path>
-                                    </svg>
-                                </i>
-                                <span class="item-name">Kontak</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.masjid.index') }}">
-                                <i class="icon">
-                                    <svg width="20" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" fill="currentColor"></path>
-                                        <path opacity="0.4" d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20H4Z" fill="currentColor"></path>
-                                    </svg>
-                                </i>
-                                <span class="item-name">Pengaturan Sistem</span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menu-masjid" role="button" aria-expanded="false" aria-controls="menu-masjid">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#keuangan" role="button" aria-expanded="false" aria-controls="keuangan">
                         <div>
                             <i class="fas fa-mosque"></i>
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,9 +123,9 @@
                             </svg>
                         </i>
                     </a>
-                     <ul class="collapse show list-unstyled ps-4" id="menu-masjid">
+                     <ul class="collapse show list-unstyled ps-4" id="keuangan">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.keuangan.index') }}">
+                             <a class="nav-link" href="{{ route('admin.keuangan.index') }}">
                                 <i class="icon">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M17.294 7.29105C17.294 10.2281 14.9391 12.5831 12 12.5831C9.0619 12.5831 6.70601 10.2281 6.70601 7.29105C6.70601
@@ -158,28 +134,13 @@
                                         </path>
                                     </svg>
                                 </i>
-                                <span class="item-name">Donasi</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.keuangan.index') }}">
-                                <i class="icon">
-                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.5 12.5537C12.2546 12.5537 14.4626 10.3171 14.4626 7.52684C14.4626 4.73663 12.2546 2.5 9.5 2.5C6.74543 2.5 4.53737 4.73663
-                                        4.53737 7.52684C4.53737 10.3171 6.74543 12.5537 9.5 12.5537ZM9.5 15.0152C5.45422 15.0152 2 15.6621 2 18.2464C2 20.8298 5.4332 21.5 9.5 21.5C13.5448 21.5 17 20.8531 17 18.2687C17
-                                        15.6844 13.5668 15.0152 9.5 15.0152ZM19.8979 9.58786H21.101C21.5962 9.58786 22 9.99731 22 10.4995C22 11.0016 21.5962 11.4111 21.101 11.4111H19.8979V12.5884C19.8979 13.0906 19.4952
-                                        13.5 18.999 13.5C18.5038 13.5 18.1 13.0906 18.1 12.5884V11.4111H16.899C16.4027 11.4111 16 11.0016 16 10.4995C16 9.99731 16.4027 9.58786 16.899 9.58786H18.1V8.41162C18.1 7.90945 18.5038
-                                        7.5 18.999 7.5C19.4952 7.5 19.8979 7.90945 19.8979 8.41162V9.58786Z" fill="currentColor">
-                                        </path>
-                                    </svg>
-                                </i>
-                                <span class="item-name">Ziswaf</span>
+                                <span class="item-name">Transaksi</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menu-masjid" role="button" aria-expanded="false" aria-controls="menu-masjid">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#event" role="button" aria-expanded="false" aria-controls="event">
                         <div>
                             <i class="fas fa-mosque"></i>
                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,9 +165,9 @@
                             </svg>
                         </i>
                     </a>
-                     <ul class="collapse show list-unstyled ps-4" id="menu-masjid">
+                     <ul class="collapse show list-unstyled ps-4" id="event">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.event.index') }}">
+                            <a class="nav-link" href="{{ route('admin.events.index') }}">
                                 <i class="icon">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33049 2.00049H16.6695C20.0705 2.00049 21.9905 3.92949
@@ -222,24 +183,13 @@
                                         </path>
                                     </svg>
                                 </i>
-                                <span class="item-name">Timeline</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.event.index') }}">
-                                <i class="icon">
-                                    <svg width="20" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" fill="currentColor"></path>
-                                        <path opacity="0.4" d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20H4Z" fill="currentColor"></path>
-                                    </svg>
-                                </i>
-                                <span class="item-name">Calender</span>
+                                <span class="item-name">Daftar Event </span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menu-masjid" role="button" aria-expanded="false" aria-controls="menu-masjid">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#inventory" role="button" aria-expanded="false" aria-controls="inventory">
                         <div>
                             <i class="fas fa-mosque"></i>
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -261,7 +211,7 @@
                             </svg>
                         </i>
                     </a>
-                     <ul class="collapse show list-unstyled ps-4" id="menu-masjid">
+                     <ul class="collapse show list-unstyled ps-4" id="inventory">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.inventory.index') }}">
                                 <i class="icon">
@@ -272,7 +222,7 @@
                                         </path>
                                     </svg>
                                 </i>
-                                <span class="item-name">Data Asset</span>
+                                <span class="item-name">Daftar Asset</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -293,7 +243,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menu-masjid" role="button" aria-expanded="false" aria-controls="menu-masjid">
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#jamaah" role="button" aria-expanded="false" aria-controls="jamaah">
                         <div>
                             <i class="fas fa-mosque"></i>
                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -318,7 +268,7 @@
                             </svg>
                         </i>
                     </a>
-                     <ul class="collapse show list-unstyled ps-4" id="menu-masjid">
+                     <ul class="collapse show list-unstyled ps-4" id="jamaah">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.jamaah.index') }}">
                                 <i class="icon">
@@ -353,17 +303,6 @@
                                     </svg>
                                 </i>
                                 <span class="item-name">user profil</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.jamaah.index') }}">
-                                <i class="icon">
-                                    <svg width="20" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" fill="currentColor"></path>
-                                        <path opacity="0.4" d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20H4Z" fill="currentColor"></path>
-                                    </svg>
-                                </i>
-                                <span class="item-name">Pengaturan Sistem</span>
                             </a>
                         </li>
                     </ul>

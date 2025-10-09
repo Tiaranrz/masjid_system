@@ -3,24 +3,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory; // HANYA HasFactory, tanpa SoftDeletes
 
     protected $fillable = [
+        'tenant_id',
         'judul_event',
-        'deskripsi',
-        'tanggal_mulai',
-        'tanggal_selesai',
-        'event_detime',
-        'lokasi',
+        'description',
+        'event_date',
+        'location',
         'status',
         'masjid',
     ];
 
-
+    public function scopeForTenant($query, $tenantId)
+    {
+        return $query->where('tenant_id', $tenantId);
     }
-
+}

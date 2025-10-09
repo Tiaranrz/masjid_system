@@ -71,6 +71,6 @@ class SuperadminController extends Controller
      */
     public function rolePermission()
     {
-        return view('superadmin.role-permission');
+        return view('superadmin.role_permission.index');
     }
 }

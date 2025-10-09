@@ -13,17 +13,20 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            '\App\Http\Middleware\EncryptCookies'::class,
+            // Pastikan SEMUA middleware di sini dipisahkan dengan koma.
+            \App\Http\Middleware\EncryptCookies::class, // <-- KOMPONEN PENTING: Koma ditambahkan di sini
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            '\App\Http\Middleware\VerifyCsrfToken'::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\TenantMiddleware::class,
         ],
 
         'api' => [
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\TenantMiddleware::class,
         ],
     ];
 
@@ -33,11 +36,32 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-    'auth' => '\App\Http\Middleware\Authenticate'::class,
-    'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // Tenancy Middleware Alias
+        'tenancy.init' => \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
 
-    // custom middleware
-    'role' => \App\Http\Middleware\RoleMiddleware::class,
+        // Auth Middleware
+        'auth' => \App\Http\Middleware\AuthMiddleware::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
+        // Custom Middleware
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'tenant' => \App\Http\Middleware\TenantMiddleware::class,
+        'init.tenant' => \App\Http\Middleware\InitializeTenant::class,
+    ];
+
+    /**
+     * The priority of the middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewarePriority = [
+        \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Illuminate\Auth\Middleware\Authenticate::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        \Illuminate\Session\Middleware\AuthenticateSession::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \Illuminate\Auth\Middleware\Authorize::class,
     ];
 }

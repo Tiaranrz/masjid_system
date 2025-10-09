@@ -36,27 +36,26 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         // Coba untuk otentikasi
-if (Auth::attempt($credentials)) {
-    $user = Auth::user();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
 
-    switch ($user->role) {
-        case 'superadmin':
-            return redirect()->route('superadmin.dashboard')
-                ->with('success', 'Login sebagai Super Admin berhasil!');
-        case 'admin_masjid':
-            return redirect()->route('admin.dashboard')
-                ->with('success', 'Login sebagai Admin berhasil!');
-        case 'jamaah':
-            return redirect()->route('jamaah.dashboard')
-                ->with('success', 'Login sebagai Jamaah berhasil!');
-        default:
-            Auth::logout();
-            return back()->withErrors([
-                'login_error' => "Role `{$user->role}` tidak dikenali. Hubungi Super Admin."
-            ]);
-    }
-}
-
+            switch ($user->role) {
+                case 'superadmin':
+                    return redirect()->route('superadmin.dashboard')
+                        ->with('success', 'Login sebagai Super Admin berhasil!');
+                case 'admin_masjid':
+                    return redirect()->route('admin.dashboard')
+                        ->with('success', 'Login sebagai Admin berhasil!');
+                case 'jamaah':
+                    return redirect()->route('jamaah.dashboard')
+                        ->with('success', 'Login sebagai Jamaah berhasil!');
+                default:
+                    Auth::logout();
+                    return back()->withErrors([
+                        'login_error' => "Role `{$user->role}` tidak dikenali. Hubungi Super Admin."
+                    ]);
+            }
+        }
 
         // Kalau gagal login (kredensial salah)
         return back()->withErrors([
@@ -101,6 +100,7 @@ if (Auth::attempt($credentials)) {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('logout');
+        // **PERBAIKAN:** Redirect ke halaman login ('login' adalah nama rute untuk '/sign-in')
+        return redirect()->route('login');
     }
 }

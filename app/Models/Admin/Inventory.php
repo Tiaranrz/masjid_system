@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Admin;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,22 +9,23 @@ class Inventory extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel. Gunakan 'inventory' jika itu nama tabel di DB Anda.
-    protected $table = 'inventory';
-
-    // Kolom yang dapat diisi secara massal (mass assignable)
     protected $fillable = [
-        'name',
+        'tenant_id',
+        'asset_name',
         'category',
-        'price',
-        'quantity',
         'unit',
+        'asset_price',
+        'condition',
         'status',
-        'location',
-        'acquisition_date',
-        'description',
-        // Tambahkan kolom lain dari migrasi Anda
     ];
 
-    // ... (Lanjutkan dengan casts atau relasi)
+    public function scopeForTenant($query, $tenantId)
+    {
+        return $query->where('tenant_id', $tenantId);
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
+    }
 }

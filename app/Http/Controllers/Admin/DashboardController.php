@@ -3,57 +3,82 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Masjid;
 use App\Models\Admin\Jamaah;
 use App\Models\Admin\Ziswaf;
-use App\Models\Admin\Keuangan;// Tambahkan Model Keuangan Anda
-use App\Models\Admin\Event;
-use Carbon\Carbon; // Tambahkan Carbon untuk penanganan tanggal
+use App\Models\Admin\Keuangan;
+use App\Models\Event;
+use App\Models\Admin\Laporan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Mendapatkan bulan dan tahun saat ini
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
+        // 🕒 Ambil bulan & tahun saat ini
+        $bulan = Carbon::now()->month;
+        $tahun = Carbon::now()->year;
 
-        // --- Statistik Utama ---
+        // 📊 Statistik Jamaah
         $totalJamaah = Jamaah::count();
         $totalJamaahAktif = Jamaah::where('status', 'aktif')->count();
-        $eventTerbaru = Event::count();
-        $totalZiswaf = Ziswaf::count(); // Ini masih count(), mungkin Anda ingin sum()
 
-        // --- Data Keuangan yang Hilang ---
-        // Asumsi Model Keuangan memiliki kolom 'type' ('pemasukan'/'pengeluaran') dan 'amount'
+        // 📅 Statistik Event & Ziswaf
+        $totalEvent = Event::count();
+        $totalZiswaf = Ziswaf::count();
 
-        // 1. Hitung Total Donasi Bulan Ini
-        $totalDonasiBulanIni = Keuangan::where('type', 'donasi')
-                                            ->whereMonth('created_at', $currentMonth)
-                                            ->whereYear('created_at', $currentYear)
-                                            ->sum('amount'); // Ganti 'amount' jika nama kolom berbeda
+        // 💰 PERBAIKAN: Statistik Keuangan - gunakan kolom 'jenis' bukan 'type'
+        $totalDonasiBulanIni = Keuangan::where('jenis', 'donasi')
+            ->whereMonth('tanggal', $bulan) // PERBAIKAN: gunakan 'tanggal' bukan 'created_at'
+            ->whereYear('tanggal', $tahun)
+            ->sum('jumlah');
 
-        // 2. Hitung Total Pengeluaran Bulan Ini
-        $totalZiswafBulanIni = Keuangan::where('type', 'Ziswaf')
-                                            ->whereMonth('created_at', $currentMonth)
-                                            ->whereYear('created_at', $currentYear)
-                                            ->sum('amount'); // Ganti 'amount' jika nama kolom berbeda
+        $totalZiswafBulanIni = Keuangan::where('jenis', 'ziswaf')
+            ->whereMonth('tanggal', $bulan) // PERBAIKAN: gunakan 'tanggal' bukan 'created_at'
+            ->whereYear('tanggal', $tahun)
+            ->sum('jumlah');
 
-        // 3. Data Aktivitas Kegiatan (Dummy/Contoh)
-        // Anda perlu mengambil data ini dari database untuk mengisi tabel di view
-        $aktivitasKegiatan = [
-            (object)['nama_kegiatan' => 'Pengajian Rutin', 'tanggal' => Carbon::now()->addDays(1), 'penanggung_jawab' => 'Ust. Ahmad'],
-            (object)['nama_kegiatan' => 'Bakti Sosial', 'tanggal' => Carbon::now()->addDays(5), 'penanggung_jawab' => 'Panitia Sosial'],
-            // ... Tambahkan query database yang sesungguhnya di sini
-        ];
+        // Total keuangan bulan ini (donasi + ziswaf)
+        $totalKeuanganBulanIni = $totalDonasiBulanIni + $totalZiswafBulanIni;
 
+        // 📌 Data aktivitas kegiatan
+        $aktivitasKegiatan = Event::take(5)->get();
+
+        if ($aktivitasKegiatan->isEmpty()) {
+            $aktivitasKegiatan = collect([
+                (object)[
+                    'nama_kegiatan' => 'Pengajian Rutin',
+                    'tanggal' => Carbon::now()->addDays(1),
+                    'penanggung_jawab' => 'Ust. Ahmad'
+                ],
+                (object)[
+                    'nama_kegiatan' => 'Bakti Sosial',
+                    'tanggal' => Carbon::now()->addDays(5),
+                    'penanggung_jawab' => 'Panitia Sosial'
+                ],
+            ]);
+        } else {
+            // Mapping supaya tetap punya nama_kegiatan & tanggal
+            $aktivitasKegiatan = $aktivitasKegiatan->map(function ($item) {
+                return (object)[
+                    'nama_kegiatan' => $item->nama ?? $item->nama_kegiatan ?? 'Kegiatan',
+                    'tanggal' => $item->tanggal ?? $item->created_at ?? Carbon::now(),
+                    'penanggung_jawab' => $item->penanggung_jawab ?? $item->penanggungjawab ?? '-'
+                ];
+            });
+        }
+
+        // 📝 Kirim data ke view
         return view('admin.dashboard', compact(
             'totalJamaah',
             'totalJamaahAktif',
-            'eventTerbaru',
+            'totalEvent',
             'totalZiswaf',
-            'totalDonasiBulanIni',    // Variabel yang hilang
-            'totalZiswafBulanIni', // Variabel yang hilang
+            'totalDonasiBulanIni',
+            'totalZiswafBulanIni',
+            'totalKeuanganBulanIni',
             'aktivitasKegiatan'
         ));
     }

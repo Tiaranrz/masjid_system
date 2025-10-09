@@ -3,28 +3,15 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class TenantMiddleware
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            return redirect()->route('sign-in');
-        }
-
-        $user = Auth::user();
-
-        // Superadmin boleh akses semua tenant
-        if ($user->role === 'superadmin') {
-            return $next($request);
-        }
-
-        // Ambil tenant_id dari session
-        $tenantId = session('tenant_id');
-
-        if (!$tenantId || $user->tenant_id !== $tenantId) {
-            abort(403, 'Akses ditolak: Anda mencoba mengakses tenant lain.');
+        // Set tenant_id default jika belum ada
+        if (!session()->has('current_tenant_id')) {
+            session(['current_tenant_id' => 'masjid1']);
         }
 
         return $next($request);

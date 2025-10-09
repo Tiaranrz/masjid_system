@@ -1,5 +1,5 @@
 @extends('superadmin.layouts.app')
-@section('title', 'Tambah Pengguna')
+@section('title', 'Tambah User')
 @section('content')
 
 <div class="conatiner-fluid content-inner mt-n5 py-0">
@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Tambah Pengguna Baru</h4>
+                        <h4 class="card-title">Tambah User Baru</h4>
                         <p class="mb-0">Isi formulir di bawah untuk menambahkan pengguna baru</p>
                     </div>
                 </div>
@@ -147,8 +147,9 @@
                                             <i class="fa fa-times me-2"></i>Reset
                                         </button>
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-user-plus me-2"></i>Tambah Pengguna
+                                            <i class="fa fa-user-plus me-2"></i>Tambah User
                                         </button>
+                                        <a herf="{{ route('superadmin.users.index') }}" class="text-center btn btn-secondary btn-icon"></a>
                                     </div>
                                 </div>
                             </div>

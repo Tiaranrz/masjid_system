@@ -35,7 +35,7 @@
                     <i class="fas fa-user-shield fa-2x text-success"></i>
                 </div>
                 <div class="progress-detail">
-                    <p class="mb-2">Jumlah Pengguna</p>
+                    <p class="mb-2">Jumlah User</p>
                     <h4 class="counter">{{ $totalPengguna }}</h4>
                 </div>
             </div>

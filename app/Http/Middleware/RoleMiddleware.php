@@ -20,7 +20,7 @@ class RoleMiddleware
     {
         // 1. Cek apakah pengguna sudah login
         if (!Auth::check()) {
-            return redirect()->route('sign-in')->with('error', 'Silakan login terlebih dahulu.');
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
         // 2. Cek apakah pengguna memiliki salah satu peran yang diizinkan
